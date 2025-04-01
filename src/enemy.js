@@ -12,8 +12,8 @@ export class Enemy extends DungeonObject {
    */
   constructor(id, hp, x, y, atk) {
     const textureMap = {
-      cyclopes: '/tile_0109.png',
-      spider: '/tile_0122.png',
+      cyclopes: './tile_0109.png',
+      spider: './tile_0122.png',
     };
     const texturePath = textureMap[id.toLocaleLowerCase()] || '/tile_0019.png';
     super(texturePath, x, y);

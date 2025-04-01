@@ -5,7 +5,7 @@ import { Enemy } from './enemy.js';
 
 export class Player extends DungeonObject {
   constructor(x, y) {
-    super('/tile_0085.png', x, y); // Load the player texture
+    super('./tile_0085.png', x, y); // Load the player texture
     // Store the desired position separately
     this.desiredPosition = this.coords.clone();
     this.inventory = [];
