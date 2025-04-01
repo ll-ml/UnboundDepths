@@ -21,19 +21,19 @@ export class Dungeon {
 
         const textureLoader = new THREE.TextureLoader();
 
-        const standardWallTexture = textureLoader.load('/tile_0014.png', () => {
+        const standardWallTexture = textureLoader.load('./tile_0014.png', () => {
             standardWallTexture.colorSpace = THREE.SRGBColorSpace
         });
 
-        const brightWallTexture = textureLoader.load('/tile_0040.png', () => {
+        const brightWallTexture = textureLoader.load('./tile_0040.png', () => {
             brightWallTexture.colorSpace = THREE.SRGBColorSpace
         });
 
-        const daggerHead = textureLoader.load('/tile_0019.png', () => {
+        const daggerHead = textureLoader.load('./tile_0019.png', () => {
             daggerHead.colorSpace = THREE.SRGBColorSpace
         });
 
-        const spoutWallTexture = textureLoader.load('/tile_0007.png', () => {
+        const spoutWallTexture = textureLoader.load('./tile_0007.png', () => {
             spoutWallTexture.colorSpace = THREE.SRGBColorSpace
         });
 
@@ -44,35 +44,35 @@ export class Dungeon {
             new THREE.MeshBasicMaterial({ map: daggerHead } ),
         ];
 
-        const floorTexture = textureLoader.load('/tile_0048.png', () => {
+        const floorTexture = textureLoader.load('./tile_0048.png', () => {
             floorTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
-        const rockTexture = textureLoader.load('/tile_0042.png', () => {
+        const rockTexture = textureLoader.load('./tile_0042.png', () => {
             rockTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
-        const pebblesTexture = textureLoader.load('/tile_0049.png', () => {
+        const pebblesTexture = textureLoader.load('./tile_0049.png', () => {
             pebblesTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
-        const doorTexture = textureLoader.load('/tile_0045.png', () => {
+        const doorTexture = textureLoader.load('./tile_0045.png', () => {
             doorTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
-        const waterTexture = textureLoader.load('/tile_0037.png', () => {
+        const waterTexture = textureLoader.load('./tile_0037.png', () => {
             waterTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
-        const dirtTexture = textureLoader.load('/tile_0000.png', () => {
+        const dirtTexture = textureLoader.load('./tile_0000.png', () => {
             dirtTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
-        const pebbleDirtTexture = textureLoader.load('/tile_0012.png', () => {
+        const pebbleDirtTexture = textureLoader.load('./tile_0012.png', () => {
             pebbleDirtTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
-        const rocksDirtTexture = textureLoader.load('/tile_0024.png', () => {
+        const rocksDirtTexture = textureLoader.load('./tile_0024.png', () => {
             rocksDirtTexture.colorSpace = THREE.SRGBColorSpace;
         });
 
