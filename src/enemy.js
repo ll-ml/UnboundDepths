@@ -9,8 +9,9 @@ export class Enemy extends DungeonObject {
    * @param {number} x - Starting x tile coord
    * @param {number} y - Startin y tile coord
    * @param {number} atk - Attack power
+   * @param {number} agroRange - Range where enemy will attack player
    */
-  constructor(id, hp, x, y, atk) {
+  constructor(id, hp, x, y, atk, agroRange = 10) {
     const textureMap = {
       cyclopes: './tile_0109.png',
       spider: './tile_0122.png',
@@ -20,6 +21,7 @@ export class Enemy extends DungeonObject {
     this.id = id;
     this.hp = hp;
     this.attackPower = atk;
+    this.agroRange = agroRange;
   }
 
   move(updatedPos) {
@@ -36,11 +38,10 @@ export class Enemy extends DungeonObject {
   tryMove(playerPos, tiles) {
     const rows = tiles.length;
     const cols = tiles[0].length;
-    const agroRange = 10;
     const manhattanDist = Math.abs(this.coords.x - playerPos.x) + Math.abs(this.coords.y - playerPos.y);
     
     // If the player is too far, do nothing.
-    if (manhattanDist > agroRange) {
+    if (manhattanDist > this.agroRange) {
       return this.coords.clone();
     }
     

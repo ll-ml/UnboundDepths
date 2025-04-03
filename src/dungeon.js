@@ -308,16 +308,16 @@ export class Dungeon {
             } while (this.denseMatrix[ey][ex] !== TileType.FLOOR);
 
             if (spawnHardEnemy) {
-                let cyclops = new Enemy("Cyclopes", 50, ex, ey, 10);
+                let cyclops = new Enemy("Cyclopes", 50, ex, ey, 10); // ID, HP, x, y, atk, agro
                 this.sparseMatrix.push(cyclops);
             } else {
-                let spider = new Enemy("Spider", 30, ex, ey, 3);
+                let spider = new Enemy("Spider", 30, ex, ey, 3, 4); // Spiders have smaller agro range
                 this.sparseMatrix.push(spider);
             }
         }
     }
 
-    // This takes a referenc to the THREE.js scene currently. Not sure if this is good.
+    // Takes reference to THREE.js scene
     updateEnemies(scene) {
         const player = this.player;
         if (!player) {
