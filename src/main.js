@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Dungeon } from './dungeon.js';
 import { TickManager } from './tickManager.js';
 
@@ -13,11 +14,121 @@ const screenHeight = window.innerHeight;
 const pixelWidth = TILE_SIZE * WIDTH;
 const pixelHeight = TILE_SIZE * HEIGHT;
 
+
+
+const perspCam = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+
+const target = new THREE.Vector3(0, 0, 0);
+
+// Spherical coordinates for the camera
+let phi = 0;            // horizontal angle
+let theta = 1;          // vertical angle (in radians)
+let radius = 300;       // distance from the target
+
+// Variables for mouse drag control
+let isMiddleMouseDown = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+// Set up mousedown listener for the middle mouse button
+window.addEventListener("mousedown", (e) => {
+  if (e.button === 1) { // 1 is typically the middle mouse button
+    e.preventDefault(); // Prevent the default auto-scroll behavior
+    isMiddleMouseDown = true;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+  }
+});
+
+// Reset when mouse button is released
+window.addEventListener("mouseup", (e) => {
+  if (e.button === 1) {
+    isMiddleMouseDown = false;
+  }
+});
+
+// Update camera angles when moving the mouse (only if middle button is held)
+window.addEventListener("mousemove", (e) => {
+  if (!isMiddleMouseDown) return;
+  
+  const deltaX = e.clientX - lastMouseX;
+  const deltaY = e.clientY - lastMouseY;
+  lastMouseX = e.clientX;
+  lastMouseY = e.clientY;
+  
+  const rotationSpeed = 0.005;
+  const verticalSpeed = 0.005;
+  phi -= deltaX * rotationSpeed;
+  theta -= deltaY * verticalSpeed;
+  
+  // Clamp theta so that the camera doesn't flip over
+  const minTheta = 0.1;  
+  const maxTheta = Math.PI - 0.1;
+  theta = Math.max(minTheta, Math.min(maxTheta, theta));
+});
+
+window.addEventListener("wheel", (e) => {
+  const zoomSpeed = 0.2;
+  radius += e.deltaY * zoomSpeed;
+  radius = Math.max(50, Math.min(1000, radius));
+});
+
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x222222, 1)
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x222222, 1);
 document.body.appendChild(renderer.domElement);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+directionalLight.position.set(5, 10, 5);
+scene.add(directionalLight);
+
+const loader = new GLTFLoader();
+loader.load(
+  'stones.glb',
+  (gltf) => {
+    const model = gltf.scene;
+    model.scale.set(15, 15, 15);
+    model.position.set(0, 0, 0);
+    scene.add(model);
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+  },
+  (error) => {
+    console.error('An error occurred loading the GLB model:', error);
+  }
+);
+
+function animate() {
+  requestAnimationFrame(animate);
+  
+  // Convert spherical coordinates to Cartesian coordinates
+  const sinTheta = Math.sin(theta);
+  const camX = target.x + radius * sinTheta * Math.cos(phi);
+  const camZ = target.z + radius * sinTheta * Math.sin(phi);
+  const camY = target.y + radius * Math.cos(theta);
+  
+  perspCam.position.set(camX, camY, camZ);
+  perspCam.lookAt(target);
+  
+  renderer.render(scene, perspCam);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  perspCam.aspect = window.innerWidth / window.innerHeight;
+  perspCam.updateProjectionMatrix();
+});
+/*
 
 // Orthographic camera: top-left is (0, 0)
 const camera = new THREE.OrthographicCamera(
@@ -28,7 +139,8 @@ const camera = new THREE.OrthographicCamera(
   -100,
   100
 );
-camera.position.set(0, 0, 10);
+
+camera.position.set(0, 0, 0);
 camera.zoom = Math.min(screenWidth / pixelWidth, screenHeight / pixelHeight);
 camera.updateProjectionMatrix();
 camera.lookAt(0, 0, 0);
@@ -194,3 +306,5 @@ document.addEventListener('keydown', (event) => {
     player.applyMove();
   }
 });
+
+*/
