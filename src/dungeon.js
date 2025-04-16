@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import {TileType, Room, Pool } from './types.js'
 import { Player } from './player.js'
 import { Enemy } from './enemy.js';
@@ -15,6 +16,32 @@ export class Dungeon {
         this.statusMessages = [];
 
         this.materialMap = this.loadMaterialMap();
+    }
+
+    loadModelMap() {
+        const loader = new GLTFLoader();
+        const modelMap = {};
+
+        const loadModel = (url, key) => {
+            return new Promise((resolve, reject) => {
+                loader.load(
+                    url, 
+                    (gltf) => {
+                        modelMap[key] = gltf.scene;
+                        resolve();
+                    },
+                    undefined,
+                    (error) => reject(error)
+                );
+            });
+        };
+
+        return Promise.all([
+            loadModel('./public/wall-narrow.glb', TileType.WALL),
+            loadModel('./public/floor-detail.glb', TileType.FLOOR),
+            loadModel('./public/floor-detail.glb', TileType.ROCK),
+            loadModel('./public/dirt.glb', TileType.DIRT),
+        ]).then(() => modelMap);
     }
 
     loadMaterialMap() {
