@@ -36,11 +36,17 @@ export class Dungeon {
             });
         };
 
+        // Duplicates are to ensure no holes in dungeon for now
         return Promise.all([
-            loadModel('./public/wall-narrow.glb', TileType.WALL),
-            loadModel('./public/floor-detail.glb', TileType.FLOOR),
-            loadModel('./public/floor-detail.glb', TileType.ROCK),
+            loadModel('./public/wall.glb', TileType.WALL),
+            loadModel('./public/floor.glb', TileType.FLOOR),
+            loadModel('./public/floor-detail.glb', TileType.PEBBLES),
+            loadModel('./public/floor.glb', TileType.ROCK),
+            loadModel('./public/wall.glb', TileType.WALL),
             loadModel('./public/dirt.glb', TileType.DIRT),
+            loadModel('./public/dirt.glb', TileType.PEBBLE_DIRT),
+            loadModel('./public/dirt.glb', TileType.ROCK_DIRT),
+            loadModel('./public/gate.glb', TileType.DOOR),
         ]).then(() => modelMap);
     }
 
@@ -382,11 +388,9 @@ export class Dungeon {
     }
 
     /*
-        CURRENT KNOWN POOL BUGS:
-        They could be nicer looking
-        TODO: Return after spawning a pool. Only 1 pool max per dungeon
+        TODO: Remove pools, make it another tile structure.
     */
-    spawnPools(spawnChance = 0.03) {
+    spawnPools(spawnChance = 0.0) {
         this.pools = [];
 
         for (const room of this.dungeonRooms) {
@@ -436,7 +440,7 @@ export class Dungeon {
         this.spawnPools();
 
 
-        this.spawnPlayer();
-        this.spawnEnemies();
+        //this.spawnPlayer();
+        //this.spawnEnemies();
     }
 }

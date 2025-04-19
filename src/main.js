@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Dungeon } from './dungeon.js';
 import { TickManager } from './tickManager.js';
+import { materialOpacity } from 'three/tsl';
 
 
 const WIDTH = 40;   // columns
@@ -79,7 +80,7 @@ window.addEventListener("mousemove", (e) => {
   
   // Clamp theta so that the camera doesn't flip over
   const minTheta = 0.1;  
-  const maxTheta = Math.PI - 0.1;
+  const maxTheta = Math.PI / 2 - 0.1;
   theta = Math.max(minTheta, Math.min(maxTheta, theta));
 });
 
@@ -155,13 +156,14 @@ function buildDungeonWithModels(modelMap) {
         0, // Y
         offsetZ + y * TILE_SIZE + TILE_SIZE / 2
       );
-      modelInstance.scale.set(10, 10, 10);
+      modelInstance.scale.set(11, 11, 11); // 11 seems to be them magick number
 
       scene.add(modelInstance);
     }
   }
 }
 
+// Kepp debug for now
 function addDebugObjects() {
   // Add directional light and its helper
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);

@@ -5,22 +5,19 @@ const WIDTH = 40;   // columns
 const HEIGHT = 30;  // rows
 
 export class DungeonObject {
-    constructor(texturePath, x, y) {
-        const textureLoader = new THREE.TextureLoader();
-        const objectTexture = textureLoader.load(texturePath);
+     /**
+   * @param {THREE.Object3D} baseObject  A loaded GLTF scene or a Mesh you want to reuse.
+   * @param {number} gridX               Column index in the dungeon grid.
+   * @param {number} gridY               Row index in the dungeon grid.
+   * @param {THREE.Vector3} worldOffset  An offset to center or translate the entire dungeon.
+   * @param {number} scale               Uniform scale factor for the object.
+   */
+    constructor(baseObject, gridX, gridY, worldOffset = new THREE.Vector3(), scale = 10) {
+        this.mesh = baseObject.clone(true);
+        this.mesh.scale.set(scale, scale, scale);
 
-        objectTexture.colorSpace = THREE.SRGBColorSpace;
-
-        const materal = new THREE.MeshBasicMaterial({ map: objectTexture });
-        const geometry = new THREE.PlaneGeometry(TILE_SIZE, TILE_SIZE);
-
-        this.mesh = new THREE.Mesh(geometry, materal);
-        //this.mesh.material.depthTest = false;
-        //this.mesh.renderOrder = 999; keepin these around for now 
-        this.mesh.material.transparent = true; // This is what works well for the rendering ontop right now
-
-        this.coords = new THREE.Vector2(x, y); // Naming issues with coords vs position
-
+        this.grid = new THREE.Vector2(gridX, gridY);
+        this.worldOffset = worldOffset.clone();
         this.updateMeshPosition();
     }
 
